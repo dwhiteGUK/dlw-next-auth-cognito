@@ -1,16 +1,28 @@
 import { useRouter } from 'next/router'
 import { useForm } from "react-hook-form";
+import { signIn } from 'next-auth/client'
 export default function SignIn({ setStatus }) {
   const { register, handleSubmit } = useForm();
   const router = useRouter()
 
-  async function signIn({ username, password }) {
+  async function login({ username, password }) {
+    try {
+      const res = signIn('domain-login', {
+        username: username,
+        password: password,
+      })
 
+      console.log(res)
+
+      router.push('/client-protected')
+    } catch (error) {
+      console.log('error signing in', error);
+    }
   }
 
   return (
 
-    <form className="mt-8 space-y-6" onSubmit={handleSubmit(signIn)}>
+    <form className="mt-8 space-y-6" onSubmit={handleSubmit(login)}>
       <input type="hidden" name="remember" value="true" />
       <div className="rounded-md shadow-sm -space-y-px">
         <div>
