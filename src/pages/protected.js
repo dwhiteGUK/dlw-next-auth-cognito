@@ -1,15 +1,14 @@
 import Head from 'next/head'
-import { signOut, useSession } from 'next-auth/client'
-
 import Link from 'next/link'
+import { getSession } from 'next-auth/client'
 
-function ClientProtected() {
-  const [session, loading] = useSession()
+
+function Protected() {
 
   return (
     <div>
       <Head>
-        <title>Authentication with Amplify, React Hook form and Tailwind CSS</title>
+        <title>Authentication with NextAuth and AWS Cognito</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
@@ -36,4 +35,20 @@ function ClientProtected() {
   )
 }
 
-export default ClientProtected
+export default Protected
+
+export async function getServerSideProps(context) {
+  const { res } = context;
+  const session = await getSession(context)
+
+  if (!session) {
+    res.writeHead(302, {
+      Location: "/",
+    });
+    return res.end();
+  }
+
+  return {
+    props: { session }
+  }
+}

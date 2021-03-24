@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Authentication with NextAuth.js, React Hook form and Tailwind CSS</title>
+        <title>Authentication with NextAuth and AWS Cognito</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
@@ -31,7 +31,7 @@ export default function Home() {
                   className="inline-flex items-center justify-center w-1/2 mt-12 rounded-md border border-transparent px-5 py-3 bg-gray-900 text-base font-medium text-white shadow hover:bg-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-rose-500 sm:px-10 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={loading}
                   onClick={() => signIn('cognito', {
-                    callbackUrl: `${window.location.origin}/client-protected`
+                    callbackUrl: `${window.location.origin}/protected`
                   })}
                 >
                   Sign In
@@ -45,8 +45,8 @@ export default function Home() {
                   Welcome, {session.user.name ?? session.user.email}
                 </h1>
                 <nav>
-                  <Link href="/client-protected">
-                    <a className="text-orange-500 hover:bg-black hover:text-white">Client Protected</a>
+                  <Link href="/protected">
+                    <a className="text-orange-500 hover:bg-black hover:text-white">Protected Page</a>
                   </Link>
                 </nav>
                 <button
@@ -65,6 +65,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-    </div >
+    </div>
   )
 }
