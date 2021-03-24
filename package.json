@@ -10,6 +10,7 @@
   "dependencies": {
     "@aws-amplify/ui-react": "^1.0.3",
     "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/typography": "^0.4.0",
     "aws-amplify": "^3.3.22",
     "next": "10.0.7",
     "next-auth": "^3.13.1",

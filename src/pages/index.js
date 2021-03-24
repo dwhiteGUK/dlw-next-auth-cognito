@@ -1,15 +1,10 @@
-import { useState } from 'react'
 import Head from 'next/head'
-import { useSession } from 'next-auth/client'
+import Link from 'next/link'
+import { signIn, signOut, useSession } from 'next-auth/client'
 
-import Register from '../components/register'
-import SignIn from '../components/sign-in'
-import Confirm from '../components/confirm'
 
 export default function Home() {
   const [session, loading] = useSession()
-  const [status, setStatus] = useState('sign-in')
-  const [user, setUser] = useState(null)
 
   return (
     <div>
@@ -18,29 +13,58 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {!session && <>
-          Not signed in <button onClick={() => signIn()} type="button">Sign in</button>
-        </>}
-
-        {session && <>
-          Signed in as {session.user.email} <button onClick={() => signOut()} type="button">Sign out</button>
-        </>}
-
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-md w-full space-y-8">
-            <div>
-              <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
-              <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Example NextAuth Sign In
-              </h2>
-            </div>
+          <div className="max-w-md w-full space-y-8 flex items-center flex-col">
+            <a>
+              <div className="flex-shrink-0 flex items-center bg-orange-500 h-20 w-20 border-radius p-2 font-bold text-4xl">
+                dlw
+              </div>
+            </a>
 
-            {status === 'sign-in' ? <SignIn setStatus={setStatus} /> : null}
-            {status === 'register' ? <Register setStatus={setStatus} setUser={setUser} /> : null}
-            {status === 'confirm' ? <Confirm setUser={setUser} user={user} /> : null}
+            {!session &&
+              <>
+                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                  Example NextAuth Sign In
+                </h2>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center w-1/2 mt-12 rounded-md border border-transparent px-5 py-3 bg-gray-900 text-base font-medium text-white shadow hover:bg-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-rose-500 sm:px-10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
+                  onClick={() => signIn('cognito', {
+                    callbackUrl: `${window.location.origin}/client-protected`
+                  })}
+                >
+                  Sign In
+                </button>
+              </>
+            }
+
+            {session &&
+              <>
+                <h1 className="my-6 text-center text-3xl font-extrabold text-gray-900">
+                  Welcome, {session.user.name ?? session.user.email}
+                </h1>
+                <nav>
+                  <Link href="/client-protected">
+                    <a className="text-orange-500 hover:bg-black hover:text-white">Client Protected</a>
+                  </Link>
+                </nav>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center w-1/2 mt-12 rounded-md border border-transparent px-5 py-3 bg-gray-900 text-base font-medium text-white shadow hover:bg-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-rose-500 sm:px-10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
+                  onClick={() => signOut({
+                    callbackUrl: `${window.location.origin}`
+                  })}
+                >
+                  Sign Out
+                </button>
+              </>
+            }
+
           </div>
         </div>
       </main>
-    </div>
+    </div >
   )
 }
